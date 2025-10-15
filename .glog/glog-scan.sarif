@@ -12,146 +12,344 @@
           "informationUri": "https://www.glog.ai",
           "rules": [
             {
-              "id": "glog-a4aa46d4-cfc2-4caa-9d77-8061f386d2fa",
+              "id": "7bb2f645-8462-3a36-a0a4-f5dcd6111b32",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially when randomness is critical for security purposes. The `rand()` function is not suitable for cryptographic purposes because it produces predictable sequences of numbers if the seed is known or can be guessed. This can lead to vulnerabilities in applications where randomness is used for generating keys, tokens, or any other security-related data.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator (CSPRNG) instead of `rand()`. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers with better randomness properties.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand() %` with a more secure random number generation approach using the `<random>` library. Below is an example of how to replace `rand()` with a CSPRNG:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister engine\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define the range for random numbers\n    std::uniform_int_distribution<> dis(0, 99); // Example range [0, 99]\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example, the following library is required:\n\n- `<random>`: This is part of the C++ Standard Library and does not require any additional dependencies beyond a standard C++ compiler that supports C++11 or later.\n\n### Relevant Links\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability refers to the use of weak or broken cryptographic algorithms for hashing sensitive data. In the context of C++, this vulnerability can occur when functions from outdated or insecure libraries, such as MD5, are used for hashing. MD5 is considered insecure as it is susceptible to hash collisions, where different inputs produce the same hash output, making it easier for attackers to reverse-engineer the hashed data.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hashing algorithm such as SHA-256 or SHA-3. These algorithms are currently considered secure and are less likely to suffer from hash collisions. Additionally, consider using a salt (random data) when hashing to further increase security.\n\n## Source Code Fix Recommendation\n\nReplace the MD5_Init function with a function from a more secure library. For example, you could use the SHA256_Init function from the OpenSSL library:\n\n```cpp\n#include <openssl/sha.h>\n\nSHA256_CTX ctx;\nSHA256_Init(&ctx);\n```\n\n## Library Dependencies\n\nThe code example requires the OpenSSL library to execute properly.\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858"
                 ]
               }
             },
             {
-              "id": "glog-7a35161b-0859-459e-a271-f51e9a69d2dc",
+              "id": "621ae85d-be14-3380-b908-217fe5945119",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially in security-sensitive applications. The `rand()` function is not suitable for cryptographic purposes because it generates predictable sequences of numbers if the seed is known. This predictability can be exploited by attackers to compromise the security of the application.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers more securely.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand()` with a more secure random number generator from the `<random>` library. Here is an example of how to do this:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister random number generator\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define a distribution range\n    std::uniform_int_distribution<> dis(1, 100);\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example properly, the following library is required:\n\n- `<random>`: This library provides facilities for generating random numbers.\n\n### OWASP Resources\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nVulnerable Hash Algorithm vulnerability refers to the use of weak or broken cryptographic algorithms for hashing sensitive data. In the context of C++, this vulnerability can occur when using outdated or insecure libraries for cryptographic operations. The MD5 algorithm, for example, is considered insecure and vulnerable to collision attacks, where two different inputs produce the same hash output.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash algorithm such as SHA-256 or SHA-3. These algorithms are currently considered secure and are not known to be vulnerable to collision attacks. Additionally, it is important to keep cryptographic libraries up to date to ensure the latest security patches and improvements are applied.\n\n## Source Code Fix Recommendation\n\nReplace the MD5_Final function with a function that uses a more secure hash algorithm. Here is an example using the OpenSSL library's SHA256 function:\n\n```cpp\n#include <openssl/sha.h>\n\nSHA256_CTX ctx;\nSHA256_Init(&ctx);\nSHA256_Update(&ctx, data, data_length);\nSHA256_Final(result.data(), &ctx);\n```\n\n## Library Dependencies\n\nThe code example requires the OpenSSL library to execute properly.\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)\n\nPlease note that the links provided are valid and active at the time of writing. They should be checked regularly to ensure they remain accessible to users."
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858"
                 ]
               }
             },
             {
-              "id": "glog-6c0bc581-f651-48a1-af09-a85b47e99522",
+              "id": "d0c8c318-a402-3a86-aaad-c3403203409d",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially when randomness is critical for security purposes. The `rand()` function is not suitable for cryptographic purposes because it produces predictable sequences of numbers if the seed is known or can be guessed. This can lead to vulnerabilities in applications where randomness is used for generating keys, tokens, or any other security-related data.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator (CSPRNG) instead of `rand()`. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers with better randomness properties.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand() %` with a more secure random number generation approach using the `<random>` library. Below is an example of how to replace `rand()` with a CSPRNG:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister engine\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define the range for random numbers\n    std::uniform_int_distribution<> dis(0, 99); // Example range [0, 99]\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example, the following library is required:\n\n- `<random>`: This is part of the C++ Standard Library and does not require any additional dependencies beyond a standard C++ compiler that supports C++11 or later.\n\n### Relevant Links\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability refers to the use of weak or broken cryptographic algorithms for hashing sensitive data. In the context of C++ programming, this vulnerability can occur when a developer uses a weak cryptographic hash function like MD5. MD5 is considered insecure for many cryptographic functions as it is susceptible to hash collisions, where two different inputs produce the same hash output, making it easier for an attacker to reverse-engineer the hashed value.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function such as SHA-256 or SHA-3. These algorithms are currently considered secure and are not known to have any collision vulnerabilities. \n\n## Source Code Fix Recommendation\n\nReplace the MD5 hash function with a more secure hash function. Here is an example of how to use the SHA-256 hash function with the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n\nSHA256_CTX ctx;\nSHA256_Init(&ctx);\nSHA256_Update(&ctx, data, length);\nunsigned char hash[SHA256_DIGEST_LENGTH];\nSHA256_Final(hash, &ctx);\n```\n\n## Library Dependencies\n\nThe OpenSSL library is required for the SHA-256 hash function.\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)\n\nPlease note that the links provided are accessible to anonymous users at the time of writing this report."
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858"
                 ]
               }
             },
             {
-              "id": "glog-12490d68-827c-4ee1-9c1f-e1584214a77d",
+              "id": "8cdf8037-d6fb-3e30-aeff-10f43e9b47fc",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially in security-sensitive applications. The `rand()` function is not suitable for cryptographic purposes because it generates predictable sequences of numbers if the seed is known. This predictability can be exploited by attackers to compromise the security of the application.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers more securely.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand()` with a more secure random number generator from the `<random>` library. Here is an example of how to do this:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister random number generator\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define a distribution range\n    std::uniform_int_distribution<> dis(1, 100);\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example properly, the following library is required:\n\n- `<random>`: This library provides facilities for generating random numbers.\n\n### OWASP Resources\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability refers to the use of weak or broken cryptographic algorithms for hashing data. In the context of C++, this vulnerability can occur when functions from outdated or insecure libraries, such as MD5, are used for hashing. MD5 is considered insecure as it is susceptible to hash collisions, where different inputs produce the same hash output, making it easier for attackers to reverse-engineer the hashed data.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hashing algorithm such as SHA-256 or SHA-3. These algorithms are currently considered secure and are not susceptible to the same vulnerabilities as MD5.\n\n## Source Code Fix Recommendation\n\nReplace the MD5_Update function with a function from a more secure library. Here is an example using the OpenSSL library's SHA256 function:\n\n```cpp\n#include <openssl/sha.h>\n\nSHA256_CTX ctx;\nSHA256_Init(&ctx);\nSHA256_Update(&ctx, s.data(), s.length());\nunsigned char result[SHA256_DIGEST_LENGTH];\nSHA256_Final(result, &ctx);\n```\n\n## Library Dependencies\n\nThe original code requires the OpenSSL library. The fixed code also requires the OpenSSL library.\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858"
                 ]
               }
             },
             {
-              "id": "glog-f634bc8a-8d08-4db0-a559-87e1a6c9a7e3",
+              "id": "1f2b0b91-3baf-391f-9c25-c9f7a83e7359",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially when randomness is critical for security purposes. The `rand()` function is not suitable for cryptographic purposes because it produces predictable sequences of numbers if the seed is known or can be guessed. This can lead to vulnerabilities in applications where randomness is used for generating keys, tokens, or any other security-related data.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator (CSPRNG) instead of `rand()`. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers with better randomness properties.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand() %` with a more secure random number generation approach using the `<random>` library. Below is an example of how to replace `rand()` with a CSPRNG:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister engine\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define the range for random numbers\n    std::uniform_int_distribution<> dis(0, 99); // Example range [0, 99]\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example, the following library is required:\n\n- `<random>`: This is part of the C++ Standard Library and does not require any additional dependencies beyond a standard C++ compiler that supports C++11 or later.\n\n### Relevant Links\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ programming language refers to the use of weak or broken cryptographic hash functions. Cryptographic hash functions are mathematical operations run on digital data; by comparing the computed hash (the output from execution of the algorithm) to a known and expected hash value, a person can determine the data's integrity. A weak hash algorithm can lead to situations where an attacker can easily generate a different input with the same hash output, leading to potential security risks such as password cracking, data integrity issues, and other forms of data manipulation.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use strong, industry-accepted cryptographic algorithms. Avoid using weak algorithms such as MD5 or SHA1, which have known vulnerabilities. Instead, use stronger algorithms like SHA-256 or SHA-3. \n\n## Source Code Fix Recommendation\n\nThe source code fix would depend on the specific hash function being used. However, if you were using a weak hash function like MD5, you could replace it with a stronger one like SHA-256. Here's an example of how you might do this using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n\n// ...\n\nunsigned char digest[SHA256_DIGEST_LENGTH];\nSHA256((unsigned char*)&data, sizeof(data), (unsigned char*)&digest); \n\nchar mdString[SHA256_DIGEST_LENGTH*2+1];\nfor (int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    sprintf(&mdString[i*2], \"%02x\", (unsigned int)digest[i]);\n\nprintf(\"SHA256 digest: %s\\n\", mdString);\n```\n\n## Library Dependencies\n\nThe OpenSSL library is required for the above code example to execute properly.\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858"
                 ]
               }
             },
             {
-              "id": "glog-c5229a75-a27a-45eb-8c61-2b75daf695bd",
+              "id": "532491a3-8ea8-37b4-b4e1-60290af9309a",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially in security-sensitive applications. The `rand()` function is not suitable for cryptographic purposes because it generates predictable sequences of numbers if the seed is known. This predictability can be exploited by attackers to compromise the security of the application.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers more securely.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand()` with a more secure random number generator from the `<random>` library. Here is an example of how to do this:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister random number generator\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define a distribution range\n    std::uniform_int_distribution<> dis(1, 100);\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example properly, the following library is required:\n\n- `<random>`: This library provides facilities for generating random numbers.\n\n### OWASP Resources\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ refers to the use of weak or broken cryptographic hash functions, such as MD5. MD5 is considered to be a weak hash function as it is susceptible to hash collisions, where two different inputs produce the same hash output. This can lead to various security issues, such as password cracking, data integrity issues, and other forms of data tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function, such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not susceptible to hash collisions like MD5.\n\n## Source Code Fix Recommendation\n\nHere is an example of how to replace MD5 with SHA-256 using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n#include <iostream>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n\nint main() {\n    std::string input = \"hello\";\n    std::string output = sha256(input);\n    std::cout << output << std::endl;\n    return 0;\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library. You can install it using the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858",
+                  "532491a3-8ea8-37b4-b4e1-60290af9309a"
                 ]
               }
             },
             {
-              "id": "glog-842a1eb1-8320-4a58-89bb-bd04b68195de",
+              "id": "f97ed3a2-f0f9-3a37-86b4-770e1c9cc24c",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially in security-sensitive applications. The `rand()` function is not suitable for cryptographic purposes because it generates predictable sequences of numbers if the seed is known. This predictability can be exploited by attackers to compromise the security of the application.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers more securely.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand()` with a more secure random number generator from the `<random>` library. Here is an example of how to do this:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister random number generator\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define a distribution range\n    std::uniform_int_distribution<> dis(1, 100);\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example properly, the following library is required:\n\n- `<random>`: This library provides facilities for generating random numbers.\n\n### OWASP Resources\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability refers to the use of weak or broken cryptographic hash functions in a software application. In C++ programming, this vulnerability can occur when a developer uses a weak hash function like MD5. MD5 is considered weak because it is susceptible to collision attacks, where two different inputs produce the same hash output, thus compromising the integrity of the data.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use stronger hash functions such as SHA-256 or SHA-3. These hash functions are currently considered secure and are not susceptible to known collision attacks. Additionally, it is important to keep up to date with the latest cryptographic research and standards, as the security of hash functions can change over time.\n\n## Source Code Fix Recommendation\n\nReplace the use of MD5 with a stronger hash function. Here is an example of how to use SHA-256 with the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n```\n\n## Library Dependencies\n\nThe above code example requires the OpenSSL library. You can install it on Ubuntu with the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858"
                 ]
               }
             },
             {
-              "id": "glog-5ff7a422-b9ab-48f3-b45f-9228dc79d2b4",
+              "id": "1d4f286f-0904-3f31-9ce5-0a426e4e95e5",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially in security-sensitive applications. The `rand()` function is not suitable for cryptographic purposes because it generates predictable sequences of numbers if the seed is known. This predictability can be exploited by attackers to compromise the security of the application.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers more securely.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand()` with a more secure random number generator from the `<random>` library. Here is an example of how to do this:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister random number generator\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define a distribution range\n    std::uniform_int_distribution<> dis(1, 100);\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example properly, the following library is required:\n\n- `<random>`: This library provides facilities for generating random numbers.\n\n### OWASP Resources\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n\n### Common Weakness Enumeration (CWE)\n\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "This finding is classified as a genuine vulnerability because the analysis detected a possible undefined behavior risk due to overlapping memory regions between the source and destination buffers in a memory copy operation. The destination and source may alias, as indicated by an assignment involving the same data pointer. Additionally, there is no evidence of a guard or check to prevent this overlap. The source may also be null, as there is no prior check ensuring it is non-null. These factors increase the likelihood of undefined behavior, which can lead to unpredictable program behavior or security vulnerabilities. The source is not a string literal or constant, so the overlap risk is not mitigated by intrinsic properties of the data.\n\n## In Context Remediation\nTo prevent undefined behavior when copying memory where the source and destination regions may overlap, use `memmove` instead of `memcpy`. `memmove` is specifically designed to handle overlapping memory regions safely. Replace the original call with:\n\n```cpp\nmemmove(ctx->buffer, data, size);\n```\n\nThis change ensures that the copy operation is safe even if the source and destination buffers overlap.\n\n## References\n- [OWASP: Buffer Overflow](https://owasp.org/www-community/vulnerabilities/Buffer_Overflow)\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\n___\n"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS121708"
                 ]
               }
             },
             {
-              "id": "glog-aae0fb09-b4bb-4fd9-8e84-d1fd83eb76e3",
+              "id": "0ef7f0a1-8098-3cd1-982e-867203bfcf8f",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially when randomness is critical for security purposes. The `rand()` function is not suitable for cryptographic purposes because it produces predictable sequences of numbers if the seed is known or can be guessed. This can lead to vulnerabilities in applications where randomness is used for generating keys, tokens, or any other security-related data.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator (CSPRNG) instead of `rand()`. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers with better randomness properties.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand() %` with a more secure random number generation approach using the `<random>` library. Below is an example of how to replace `rand()` with a CSPRNG:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister engine\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define the range for random numbers\n    std::uniform_int_distribution<> dis(0, 99); // Example range [0, 99]\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example, the following library is required:\n\n- `<random>`: This is part of the C++ Standard Library and does not require any additional dependencies beyond a standard C++ compiler that supports C++11 or later.\n\n### Relevant Links\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "This finding is considered a genuine vulnerability because the analysis detected a possible undefined behavior risk due to overlapping memory regions between the source and destination in a memory copy operation. The dataflow analysis indicates that the source and destination may refer to overlapping memory, which can cause undefined behavior with functions like memcpy. Additionally, there is no evidence of a guard or check to prevent this overlap, and the source may also be null, which further increases the risk. The destination appears to be a buffer within a structure, and the source is an identifier, making overlap feasible. These factors collectively indicate a real risk of undefined behavior and potential security issues.\n\n## In Context Remediation\nTo prevent undefined behavior when copying memory, ensure that the source and destination buffers do not overlap. If there is any possibility of overlap, use `memmove` instead of `memcpy`, as `memmove` is designed to handle overlapping regions safely. For example, replace the original call with:\n\n```cpp\nmemmove(&ctx->buffer[used], data, available);\n```\n\nAdditionally, consider adding explicit checks to ensure that `data` is not null before performing the copy to avoid null pointer dereference issues.\n\n## References\n- [OWASP C-Based Toolchain Hardening Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [OWASP Buffer Overflow](https://owasp.org/www-community/vulnerabilities/Buffer_Overflow)\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n- [CWE-787: Out-of-bounds Write](https://cwe.mitre.org/data/definitions/787.html)\n\n___\n"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS121708"
                 ]
               }
             },
             {
-              "id": "glog-1c9a3a2e-2454-40d4-a896-884ebd385b1d",
+              "id": "a88520c1-7891-363e-bf30-9fb43673fc71",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially when randomness is critical for security purposes. The `rand()` function is not suitable for cryptographic purposes because it produces predictable sequences of numbers if the seed is known or can be guessed. This can lead to vulnerabilities in applications where randomness is used for generating keys, tokens, or any other security-related data.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator (CSPRNG) instead of `rand()`. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers with better randomness properties.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand() %` with a more secure random number generation approach using the `<random>` library. Below is an example of how to replace `rand()` with a CSPRNG:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister engine\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define the range for random numbers\n    std::uniform_int_distribution<> dis(0, 99); // Example range [0, 99]\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example, the following library is required:\n\n- `<random>`: This is part of the C++ Standard Library and does not require any additional dependencies beyond a standard C++ compiler that supports C++11 or later.\n\n### Relevant Links\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ refers to the use of weak or broken cryptographic hash functions, such as MD5. MD5 is considered to be a weak hash function as it is susceptible to hash collisions, where two different inputs produce the same hash output. This can lead to various security issues, such as password cracking, data integrity issues, and other forms of data tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function, such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not susceptible to hash collisions like MD5.\n\n## Source Code Fix Recommendation\n\nHere is an example of how to replace MD5 with SHA-256 using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n#include <iostream>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n\nint main() {\n    std::string input = \"hello\";\n    std::string output = sha256(input);\n    std::cout << output << std::endl;\n    return 0;\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library. You can install it using the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858",
+                  "a88520c1-7891-363e-bf30-9fb43673fc71"
                 ]
               }
             },
             {
-              "id": "glog-b37bde7e-e626-43c8-97ca-6ba6672338d4",
+              "id": "f77439da-2183-32b5-859b-54d5d85efcd8",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially when randomness is critical for security purposes. The `rand()` function is not suitable for cryptographic purposes because it produces predictable sequences of numbers if the seed is known or can be guessed. This can lead to vulnerabilities in applications where randomness is used for generating keys, tokens, or any other security-related data.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator (CSPRNG) instead of `rand()`. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers with better randomness properties.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand() %` with a more secure random number generation approach using the `<random>` library. Below is an example of how to replace `rand()` with a CSPRNG:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister engine\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define the range for random numbers\n    std::uniform_int_distribution<> dis(0, 99); // Example range [0, 99]\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example, the following library is required:\n\n- `<random>`: This is part of the C++ Standard Library and does not require any additional dependencies beyond a standard C++ compiler that supports C++11 or later.\n\n### Relevant Links\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ refers to the use of weak or broken cryptographic hash functions, such as MD5. MD5 is considered to be a weak hash function as it is susceptible to hash collisions, where two different inputs produce the same hash output. This can lead to various security issues, such as password cracking, data integrity issues, and other forms of data tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function, such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not susceptible to hash collisions like MD5.\n\n## Source Code Fix Recommendation\n\nHere is an example of how to replace MD5 with SHA-256 using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n#include <iostream>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n\nint main() {\n    std::string input = \"hello\";\n    std::string output = sha256(input);\n    std::cout << output << std::endl;\n    return 0;\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library. You can install it using the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858",
+                  "f77439da-2183-32b5-859b-54d5d85efcd8"
                 ]
               }
             },
             {
-              "id": "glog-9632352b-ef70-4786-9eea-aac25c6dca25",
+              "id": "084c8529-bd5c-3d9e-8137-64b9cdae1c90",
               "help": {
                 "text": "",
-                "markdown": "### Description\n\nIn C++ programming, using weak or non-cryptographic random number generators, such as the `rand()` function, can lead to vulnerabilities, especially when randomness is critical for security purposes. The `rand()` function is not suitable for cryptographic purposes because it produces predictable sequences of numbers if the seed is known or can be guessed. This can lead to vulnerabilities in applications where randomness is used for generating keys, tokens, or any other security-related data.\n\n### General Mitigation Advice\n\nTo mitigate this vulnerability, use a cryptographically secure random number generator (CSPRNG) instead of `rand()`. In C++, the `<random>` library provides better alternatives, such as `std::random_device` and `std::mt19937`, which can be used to generate random numbers with better randomness properties.\n\n### Source Code Fix Recommendation\n\nReplace the use of `rand() %` with a more secure random number generation approach using the `<random>` library. Below is an example of how to replace `rand()` with a CSPRNG:\n\n```cpp\n#include <iostream>\n#include <random>\n\nint main() {\n    // Create a random device and a Mersenne Twister engine\n    std::random_device rd;\n    std::mt19937 gen(rd());\n\n    // Define the range for random numbers\n    std::uniform_int_distribution<> dis(0, 99); // Example range [0, 99]\n\n    // Generate a random number\n    int random_number = dis(gen);\n\n    std::cout << \"Secure random number: \" << random_number << std::endl;\n\n    return 0;\n}\n```\n\n### Library Dependencies\n\nTo execute the above code example, the following library is required:\n\n- `<random>`: This is part of the C++ Standard Library and does not require any additional dependencies beyond a standard C++ compiler that supports C++11 or later.\n\n### Relevant Links\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-338: Use of Cryptographically Weak Pseudo-Random Number Generator (PRNG)](https://cwe.mitre.org/data/definitions/338.html)"
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ refers to the use of weak or broken cryptographic hash functions, such as MD5. MD5 is considered to be a weak hash function as it is susceptible to hash collisions, where two different inputs produce the same hash output. This can lead to various security issues, such as password cracking, data integrity issues, and other forms of data tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function, such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not susceptible to hash collisions like MD5.\n\n## Source Code Fix Recommendation\n\nHere is an example of how to replace MD5 with SHA-256 using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n#include <iostream>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n\nint main() {\n    std::string input = \"hello\";\n    std::string output = sha256(input);\n    std::cout << output << std::endl;\n    return 0;\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library. You can install it using the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
               },
               "properties": {
                 "tags": [
-                  "DS148264"
+                  "DS126858",
+                  "084c8529-bd5c-3d9e-8137-64b9cdae1c90"
+                ]
+              }
+            },
+            {
+              "id": "e6fa2a62-31c9-3829-b7b6-f758545f9133",
+              "help": {
+                "text": "",
+                "markdown": "This finding is classified as a genuine vulnerability because the analysis detected a possible undefined behavior risk due to overlapping memory regions between the source and destination in a memory copy operation. The destination and source may overlap based on data flow analysis, which can cause unpredictable results with functions like memcpy. Additionally, there is no evidence of a guard to prevent this overlap, and the source pointer may be null at this point, which could also lead to undefined behavior. The destination appears to be a buffer within a structure, reducing the risk of it being null, but the overlap and null source risks remain. These factors indicate a real risk of undefined behavior and potential security issues.\n\n## In Context Remediation\nTo prevent undefined behavior when copying memory regions that may overlap, use `memmove` instead of `memcpy`. `memmove` is designed to handle overlapping source and destination regions safely. Replace the original call with:\n\n```cpp\nmemmove(&ctx->buffer[used], data, size);\n```\n\nAdditionally, ensure that `data` is not null before the call to avoid null pointer dereference:\n\n```cpp\nif (data != NULL) {\n    memmove(&ctx->buffer[used], data, size);\n}\n```\n\n## References\n- [OWASP C-Based Toolchain Hardening Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n- [CWE-787: Out-of-bounds Write](https://cwe.mitre.org/data/definitions/787.html)\n- [OWASP Buffer Overflow](https://owasp.org/www-community/vulnerabilities/Buffer_Overflow)\n\n___\n"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "d05914d8-cfb6-38ba-a609-2037f99f5f2b",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ refers to the use of weak or broken cryptographic hash functions, such as MD5. MD5 is considered to be a weak hash function as it is susceptible to hash collisions, where two different inputs produce the same hash output. This can lead to various security issues, such as password cracking, data integrity issues, and other forms of data tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function, such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not susceptible to hash collisions like MD5.\n\n## Source Code Fix Recommendation\n\nHere is an example of how to replace MD5 with SHA-256 using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n#include <iostream>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n\nint main() {\n    std::string input = \"hello\";\n    std::string output = sha256(input);\n    std::cout << output << std::endl;\n    return 0;\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library. You can install it using the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS126858",
+                  "d05914d8-cfb6-38ba-a609-2037f99f5f2b"
+                ]
+              }
+            },
+            {
+              "id": "02c315a0-a21c-3794-ac97-b49808d2fad6",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ refers to the use of weak or broken cryptographic hash functions, such as MD5. MD5 is considered to be a weak hash function as it is susceptible to hash collisions, where two different inputs produce the same hash output. This can lead to various security issues, such as password cracking, data integrity issues, and other forms of data tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function, such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not susceptible to hash collisions like MD5.\n\n## Source Code Fix Recommendation\n\nHere is an example of how to replace MD5 with SHA-256 using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n#include <iostream>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n\nint main() {\n    std::string input = \"hello\";\n    std::string output = sha256(input);\n    std::cout << output << std::endl;\n    return 0;\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library. You can install it using the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS126858"
+                ]
+              }
+            },
+            {
+              "id": "a84c0771-6618-3c5a-bf96-9d90628ca6cc",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ refers to the use of weak or broken cryptographic hash functions, such as MD5. MD5 is considered to be a weak hash function as it is susceptible to hash collisions, where two different inputs produce the same hash output. This can lead to various security issues, such as password cracking, data integrity issues, and other forms of data tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function, such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not susceptible to hash collisions like MD5.\n\n## Source Code Fix Recommendation\n\nHere is an example of how to replace MD5 with SHA-256 using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n#include <iostream>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n\nint main() {\n    std::string input = \"hello\";\n    std::string output = sha256(input);\n    std::cout << output << std::endl;\n    return 0;\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library. You can install it using the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS126858",
+                  "a84c0771-6618-3c5a-bf96-9d90628ca6cc"
+                ]
+              }
+            },
+            {
+              "id": "82cd63e4-d340-3a25-91cd-888b50742768",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"Implementation of Vulnerable Cryptography Hash Function\" vulnerability refers to the use of weak or broken cryptographic hash functions in a C++ program. Cryptographic hash functions are used to convert input data into a fixed size hash value, which is typically used for password storage, data integrity checks, and digital signatures. If a weak or broken hash function is used, it can lead to various security issues such as password cracking, data tampering, and spoofing.\n\nIn the provided code snippet, the `STEP` function is a part of a cryptographic hash function. If this function or the hash function it is a part of is known to be weak or broken, it can lead to the aforementioned security issues.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use strong and well-vetted cryptographic hash functions such as SHA-256 or SHA-3. Avoid using deprecated or broken hash functions such as MD5 or SHA-1.\n\n## Source Code Fix Recommendation\n\nWithout the full context of the `STEP` function and the hash function it is a part of, it's hard to provide a specific fix. However, if the `STEP` function is a part of a weak hash function such as MD5, it would be recommended to replace the entire hash function with a stronger one such as SHA-256.\n\n```cpp\n#include <openssl/sha.h>\n\n// ...\n\nunsigned char digest[SHA256_DIGEST_LENGTH];\nSHA256((unsigned char*)&data, sizeof(data), (unsigned char*)&digest); \n\nchar mdString[SHA256_DIGEST_LENGTH*2+1];\nfor (int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    sprintf(&mdString[i*2], \"%02x\", (unsigned int)digest[i]);\n```\n\n## Library Dependencies\n\nThe OpenSSL library is required for the SHA-256 hash function.\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS109733"
+                ]
+              }
+            },
+            {
+              "id": "0ff09ed7-cee4-34ce-b886-0ee9f79ba46d",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe \"Implementation of Vulnerable Cryptography Hash Function\" vulnerability refers to the use of weak or broken cryptographic hash functions in a C++ program. Cryptographic hash functions are used to convert input data into a fixed size hash value, which is typically used for data integrity checks and password storage. If a weak or broken hash function is used, it can lead to various security issues such as data tampering, password cracking, and other forms of attacks.\n\nIn the provided code snippet, the `STEP` function is a part of an implementation of the MD5 hash function. MD5 is considered to be a weak hash function as it is vulnerable to hash collisions, where different input data can produce the same hash value.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a strong and secure hash function such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not known to have any significant vulnerabilities.\n\n## Source Code Fix Recommendation\n\nReplace the MD5 hash function with a secure hash function. Here is an example of how to use the SHA-256 hash function in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library to execute properly.\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS109733"
+                ]
+              }
+            },
+            {
+              "id": "3ff0d962-eebe-34b1-8ac9-e689b2a268bf",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ programming language refers to the use of weak or broken cryptographic algorithms for hashing. This can lead to a variety of security issues, such as the ability for an attacker to reverse the hash or create collisions, potentially leading to unauthorized access or information disclosure. In your code, you are using MD5, which is considered to be a weak hash function due to its vulnerability to collision attacks.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, you should replace the weak hash function with a stronger one. Hash functions such as SHA-256 or SHA-3 are currently recommended. It's also important to keep up to date with the latest cryptographic recommendations, as the strength of hash functions can change over time as new attacks are discovered.\n\n## Source Code Fix Recommendation\n\nReplace the MD5 hash function with a stronger one, such as SHA-256. Here is an example of how to do this using the OpenSSL library:\n\n```cpp\n#include <openssl/sha.h>\n\nunsigned char block[SHA256_DIGEST_LENGTH];\nSHA256((unsigned char*)&data, sizeof(data), (unsigned char*)&block);\n```\n\n## Library Dependencies\n\nThe OpenSSL library is required for the code example to execute properly.\n\n## OWASP Resources\n\n- [Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [Password Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Password_Storage_Cheat_Sheet.html)\n\n## Common Weakness Enumeration (CWE)\n\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS126858"
+                ]
+              }
+            },
+            {
+              "id": "1d7f9f4a-9d11-3357-b721-51b68d58ca3e",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ refers to the use of weak or broken cryptographic hash functions, such as MD5. MD5 is considered to be a weak hash function as it is susceptible to hash collisions, where two different inputs produce the same hash output. This can lead to various security issues, such as password cracking, data integrity issues, and other forms of data tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function, such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not susceptible to hash collisions like MD5.\n\n## Source Code Fix Recommendation\n\nHere is an example of how to replace MD5 with SHA-256 using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n#include <iostream>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n\nint main() {\n    std::string input = \"hello\";\n    std::string output = sha256(input);\n    std::cout << output << std::endl;\n    return 0;\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library. You can install it using the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS126858"
+                ]
+              }
+            },
+            {
+              "id": "11c692eb-3399-358d-adf9-457c6d094e28",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability in C++ refers to the use of weak or broken cryptographic hash functions, such as MD5. MD5 is considered to be a weak hash function as it is susceptible to hash collisions, where two different inputs produce the same hash output. This can lead to various security issues, such as password cracking, data integrity issues, and other forms of data tampering.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use a stronger, more secure hash function, such as SHA-256 or SHA-3. These hash functions are currently considered to be secure and are not susceptible to hash collisions like MD5.\n\n## Source Code Fix Recommendation\n\nHere is an example of how to replace MD5 with SHA-256 using the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n#include <string>\n#include <iostream>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n\nint main() {\n    std::string input = \"hello\";\n    std::string output = sha256(input);\n    std::cout << output << std::endl;\n    return 0;\n}\n```\n\n## Library Dependencies\n\nThe above code requires the OpenSSL library. You can install it using the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS126858"
+                ]
+              }
+            },
+            {
+              "id": "5e520ce1-a7d2-356c-8740-7cab5c016de9",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nA \"Vulnerable Hash Algorithm\" vulnerability refers to the use of weak or broken cryptographic hash functions in a software application. In C++ programming, this vulnerability can occur when a developer uses a weak hash function like MD5. MD5 is considered weak because it is susceptible to collision attacks, where two different inputs produce the same hash output, thus compromising the integrity of the data.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, it is recommended to use stronger hash functions such as SHA-256 or SHA-3. These hash functions are currently considered secure and are not susceptible to known collision attacks. Additionally, it is important to keep up to date with the latest cryptographic research and standards, as the security of hash functions can change over time.\n\n## Source Code Fix Recommendation\n\nReplace the use of MD5 with a stronger hash function. Here is an example of how to use SHA-256 with the OpenSSL library in C++:\n\n```cpp\n#include <openssl/sha.h>\n\nstd::string sha256(const std::string str)\n{\n    unsigned char hash[SHA256_DIGEST_LENGTH];\n    SHA256_CTX sha256;\n    SHA256_Init(&sha256);\n    SHA256_Update(&sha256, str.c_str(), str.size());\n    SHA256_Final(hash, &sha256);\n    std::stringstream ss;\n    for(int i = 0; i < SHA256_DIGEST_LENGTH; i++)\n    {\n        ss << std::hex << std::setw(2) << std::setfill('0') << (int)hash[i];\n    }\n    return ss.str();\n}\n```\n\n## Library Dependencies\n\nThe above code example requires the OpenSSL library. You can install it on Ubuntu with the following command:\n\n```bash\nsudo apt-get install libssl-dev\n```\n\n## References\n\n- [OWASP Cryptographic Storage Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/Cryptographic_Storage_Cheat_Sheet.html)\n- [CWE-327: Use of a Broken or Risky Cryptographic Algorithm](https://cwe.mitre.org/data/definitions/327.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS126858"
+                ]
+              }
+            },
+            {
+              "id": "66024b3f-7bc5-33fb-8e8d-0441b19ba2c0",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe vulnerability in question is related to the use of the `strlen()` function in C++. The `strlen()` function is used to find the length of a string. However, it can lead to vulnerabilities if the string is not null-terminated, as `strlen()` counts characters until it reaches a null character. If a null character is not found, `strlen()` could continue reading and return an incorrect length, potentially leading to buffer overflows, memory corruption, and other issues.\n\nIn the provided code snippet, `strlen(keys[i])` is used as the limit in the `strncmp()` function. If `keys[i]` is not null-terminated, `strlen()` could return an incorrect length, leading to unexpected behavior in `strncmp()`.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, ensure that all strings are null-terminated before passing them to `strlen()`. Additionally, consider using safer alternatives to `strlen()`, such as `strnlen()`, which takes a maximum length as an argument and will not read past this limit, even if a null character is not found.\n\n## Source Code Fix Recommendation\n\nHere is a recommended fix for the provided code snippet:\n\n```cpp\nsize_t len = strnlen(keys[i], MAX_LENGTH);\nif (strncmp(p, keys[i], len) == 0) {\n    // ...\n}\n```\n\nIn this fix, `strnlen()` is used instead of `strlen()`. `MAX_LENGTH` should be defined as the maximum expected length of `keys[i]`.\n\n## Library Dependencies\n\nThe provided code snippet requires the following library dependencies:\n\n- `<cstring>`: This library provides the `strlen()` and `strncmp()` functions.\n\n## OWASP and CWE Links\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-126: Buffer Over-read](https://cwe.mitre.org/data/definitions/126.html)\n\nPlease note that these links are subject to change and may not be accessible in the future."
+              },
+              "properties": {
+                "tags": [
+                  "DS140021"
+                ]
+              }
+            },
+            {
+              "id": "8ab23c78-85e1-314b-a958-7a6c4c5728e5",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `strcat` function in C++ is used to concatenate strings. However, it is considered unsafe because it does not perform bounds checking, and thus can lead to buffer overflow vulnerabilities. If the destination buffer is not large enough to contain the concatenated result, this can lead to overwriting of adjacent memory, leading to unpredictable program behavior, crashes, and potential code execution vulnerabilities.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use safer string handling functions that perform bounds checking, such as `strncat`, `strlcat`, or consider using higher-level string abstractions provided by C++, such as `std::string`.\n\n## Source Code Fix Recommendation\n\nReplace the `strcat` function with `strncat` function, which includes the size of the destination buffer as a parameter:\n\n```cpp\nstrncat(temp, imageNames[j], sizeof(temp) - strlen(temp) - 1);\n```\n\nThis ensures that the concatenation does not exceed the size of the destination buffer, preventing buffer overflow.\n\n## Library Dependencies\n\nThe code example requires the `<cstring>` library for the `strcat` function.\n\n## References\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\nPlease note that the links provided are accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "tags": [
+                  "DS141863"
+                ]
+              }
+            },
+            {
+              "id": "90e986ec-a1e9-38a7-a9e7-bf1220b32e41",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nUnsecured Web Link Vulnerability in C++ is not a direct vulnerability in the language itself, but rather a potential security risk that can occur when a C++ application interacts with web resources. This vulnerability arises when a C++ application uses an unsecured (non-HTTPS) link to access web resources. This can expose the application to various attacks such as Man-in-the-Middle (MitM) attacks, where an attacker can intercept and potentially alter the data being transmitted.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, always use secure HTTPS links when your application needs to access web resources. HTTPS encrypts the data being transmitted, making it much more difficult for an attacker to intercept or alter it.\n\n## Source Code Fix Recommendation\n\nIf you're using a library like libcurl to handle HTTP requests, you can simply replace the unsecured \"http://\" prefix with \"https://\". For example, if the vulnerable code is:\n\n```cpp\nCURL *curl = curl_easy_init();\nif(curl) {\n  CURLcode res;\n  curl_easy_setopt(curl, CURLOPT_URL, \"http://www.apache.org\");\n  /* Perform the request, res will get the return code */ \n  res = curl_easy_perform(curl);\n  /* Check for errors */ \n  if(res != CURLE_OK)\n    fprintf(stderr, \"curl_easy_perform() failed: %s\\n\",\n            curl_easy_strerror(res));\n  /* always cleanup */ \n  curl_easy_cleanup(curl);\n}\n```\n\nYou can fix the vulnerability by changing the URL to use HTTPS:\n\n```cpp\nCURL *curl = curl_easy_init();\nif(curl) {\n  CURLcode res;\n  curl_easy_setopt(curl, CURLOPT_URL, \"https://www.apache.org\");\n  /* Perform the request, res will get the return code */ \n  res = curl_easy_perform(curl);\n  /* Check for errors */ \n  if(res != CURLE_OK)\n    fprintf(stderr, \"curl_easy_perform() failed: %s\\n\",\n            curl_easy_strerror(res));\n  /* always cleanup */ \n  curl_easy_cleanup(curl);\n}\n```\n\n## Library Dependencies\n\nThe code example requires the libcurl library.\n\n## OWASP and CWE Links\n\n- [CWE-319: Cleartext Transmission of Sensitive Information](https://cwe.mitre.org/data/definitions/319.html)"
+              },
+              "properties": {
+                "tags": [
+                  "DS137138"
+                ]
+              }
+            },
+            {
+              "id": "3ab1a4b3-1ec6-33e0-94c8-aa84f78ba5f5",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `strcpy` function in C++ is a standard library function that copies a string. It is considered unsafe because it does not check the size of the destination buffer, which can lead to buffer overflow if the source string is larger than the destination buffer. This can cause a program to crash or, in the worst case, allow an attacker to execute arbitrary code.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use safer string copy functions that check the size of the destination buffer. These include `strncpy`, `strlcpy`, or `memcpy`. However, these functions can also be misused, so it's important to ensure that the size argument correctly represents the size of the destination buffer.\n\n## Source Code Fix Recommendation\n\nReplace the `strcpy` function with a safer function, such as `strncpy`. Here's how you can do it:\n\n```cpp\nstrncpy(temp, dst, sizeof(temp));\ntemp[sizeof(temp) - 1] = '\\0'; // Ensure null-termination\n```\n\n## Library Dependencies\n\nThe `strcpy` and `strncpy` functions are part of the C standard library, so you need to include the `cstring` header:\n\n```cpp\n#include <cstring>\n```\n\n## References\n\n- [CWE-119: Improper Restriction of Operations within the Bounds of a Memory Buffer](https://cwe.mitre.org/data/definitions/119.html)\n\nPlease note that the links provided are accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "tags": [
+                  "DS185832"
+                ]
+              }
+            },
+            {
+              "id": "75c3f5d4-8565-38f3-a1db-e4574b246075",
+              "help": {
+                "text": "",
+                "markdown": "This finding is classified as a genuine vulnerability because the code copies memory from one buffer to another using a standard memory copy function, but there are no checks to ensure that the source buffer is not null. If the source pointer is null at runtime, this will result in undefined behavior, potentially causing a crash or other unpredictable results. The analysis did not detect any prior validation or guard that would guarantee the source pointer is valid before the copy operation. The destination buffer is likely safe, but the risk remains due to the unchecked source pointer.\n\n## In Context Remediation\nBefore performing the memory copy, ensure that the source pointer is not null. Add an explicit check to prevent undefined behavior if the source is invalid.\n\n```cpp\nif (output_row != nullptr) {\n    memcpy(temp_output_row, output_row, elementsInRow * sizeof(Rpp8u));\n} else {\n    // Handle error: source buffer is null\n    // For example, log an error or return an error code\n}\n```\n\nThis check ensures that the memory copy only occurs when the source buffer is valid, preventing crashes or unpredictable behavior.\n\n## References\n- [OWASP C-Based Toolchain Hardening Cheat Sheet](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-476: NULL Pointer Dereference](https://cwe.mitre.org/data/definitions/476.html)\n- [OWASP Buffer Overflow](https://owasp.org/www-community/vulnerabilities/Buffer_Overflow)\n\n\n___\n"
+              },
+              "properties": {
+                "tags": [
+                  "DS121708"
+                ]
+              }
+            },
+            {
+              "id": "07c032d8-5c27-34bf-83aa-a8562ad2564e",
+              "help": {
+                "text": "",
+                "markdown": "## Description\n\nThe `strcat` function in C++ is used to concatenate strings. However, it is considered unsafe because it does not perform bounds checking, and thus can lead to buffer overflow vulnerabilities. If the destination buffer is not large enough to contain the concatenated result, this can lead to overwriting of adjacent memory, leading to unpredictable program behavior, crashes, and potential code execution.\n\n## Mitigation Advice\n\nTo mitigate this vulnerability, use safer string handling functions that perform bounds checking, such as `strncat`, `strlcat`, or `snprintf`. Always ensure that your buffers are large enough to contain any data that will be written to them, including null terminators.\n\n## Source Code Fix Recommendation\n\nReplace the `strcat` function with a safer alternative. For example, you could use `strncat` like this:\n\n```cpp\n#include <cstring>\n\n// ...\n\nchar dst[256];\nstrncat(dst, \"/\", sizeof(dst) - strlen(dst) - 1);\n```\n\nThis code will ensure that no more than `sizeof(dst) - strlen(dst) - 1` characters are written to `dst`, preventing buffer overflow.\n\n## Library Dependencies\n\nThe code example requires the `<cstring>` library.\n\n## References\n\n- [OWASP C++ Secure Coding Practices](https://cheatsheetseries.owasp.org/cheatsheets/C-Based_Toolchain_Hardening_Cheat_Sheet.html)\n- [CWE-120: Buffer Copy without Checking Size of Input ('Classic Buffer Overflow')](https://cwe.mitre.org/data/definitions/120.html)\n\nPlease note that the links provided are accessible to anonymous users at the time of writing this report."
+              },
+              "properties": {
+                "tags": [
+                  "DS141863"
                 ]
               }
             }
@@ -167,30 +365,30 @@
       "language": "en-US",
       "results": [
         {
-          "ruleId": "glog-a4aa46d4-cfc2-4caa-9d77-8061f386d2fa",
+          "ruleId": "7bb2f645-8462-3a36-a0a4-f5dcd6111b32",
           "kind": "fail",
           "level": "error",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Vulnerable Hash Algorithm"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 576,
-                  "startColumn": 23,
-                  "endLine": 576,
-                  "endColumn": 31,
-                  "charOffset": 26386,
-                  "charLength": 8,
+                  "startLine": 310,
+                  "startColumn": 4,
+                  "endLine": 310,
+                  "endColumn": 7,
+                  "charOffset": 10169,
+                  "charLength": 3,
                   "snippet": {
-                    "text": "rand() %",
+                    "text": "MD5",
                     "rendered": {
-                      "text": "rand() %",
-                      "markdown": "`rand() %`"
+                      "text": "MD5",
+                      "markdown": "`MD5`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -198,39 +396,87 @@
               }
             }
           ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10169,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10169,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "properties": {
-            "DevSkimSeverity": "Important",
+            "DevSkimSeverity": "Critical",
             "DevSkimConfidence": "High",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "Cryptography.BannedHashAlgorithm"
             ]
           }
         },
         {
-          "ruleId": "glog-7a35161b-0859-459e-a271-f51e9a69d2dc",
+          "ruleId": "621ae85d-be14-3380-b908-217fe5945119",
           "kind": "fail",
           "level": "error",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Vulnerable Hash Algorithm"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 577,
-                  "startColumn": 26,
-                  "endLine": 577,
-                  "endColumn": 31,
-                  "charOffset": 26474,
-                  "charLength": 5,
+                  "startLine": 312,
+                  "startColumn": 4,
+                  "endLine": 312,
+                  "endColumn": 7,
+                  "charOffset": 10233,
+                  "charLength": 3,
                   "snippet": {
-                    "text": "rand(",
+                    "text": "MD5",
                     "rendered": {
-                      "text": "rand(",
-                      "markdown": "`rand(`"
+                      "text": "MD5",
+                      "markdown": "`MD5`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -238,39 +484,87 @@
               }
             }
           ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10233,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10233,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "properties": {
-            "DevSkimSeverity": "Important",
+            "DevSkimSeverity": "Critical",
             "DevSkimConfidence": "High",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "Cryptography.BannedHashAlgorithm"
             ]
           }
         },
         {
-          "ruleId": "glog-6c0bc581-f651-48a1-af09-a85b47e99522",
+          "ruleId": "d0c8c318-a402-3a86-aaad-c3403203409d",
           "kind": "fail",
           "level": "error",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Vulnerable Hash Algorithm"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 577,
-                  "startColumn": 26,
-                  "endLine": 577,
-                  "endColumn": 34,
-                  "charOffset": 26474,
-                  "charLength": 8,
+                  "startLine": 309,
+                  "startColumn": 4,
+                  "endLine": 309,
+                  "endColumn": 7,
+                  "charOffset": 10150,
+                  "charLength": 3,
                   "snippet": {
-                    "text": "rand() %",
+                    "text": "MD5",
                     "rendered": {
-                      "text": "rand() %",
-                      "markdown": "`rand() %`"
+                      "text": "MD5",
+                      "markdown": "`MD5`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -278,39 +572,87 @@
               }
             }
           ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10150,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10150,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "properties": {
-            "DevSkimSeverity": "Important",
+            "DevSkimSeverity": "Critical",
             "DevSkimConfidence": "High",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "Cryptography.BannedHashAlgorithm"
             ]
           }
         },
         {
-          "ruleId": "glog-12490d68-827c-4ee1-9c1f-e1584214a77d",
+          "ruleId": "8cdf8037-d6fb-3e30-aeff-10f43e9b47fc",
           "kind": "fail",
           "level": "error",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Vulnerable Hash Algorithm"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 567,
-                  "startColumn": 26,
-                  "endLine": 567,
-                  "endColumn": 31,
-                  "charOffset": 25917,
-                  "charLength": 5,
+                  "startLine": 311,
+                  "startColumn": 4,
+                  "endLine": 311,
+                  "endColumn": 7,
+                  "charOffset": 10189,
+                  "charLength": 3,
                   "snippet": {
-                    "text": "rand(",
+                    "text": "MD5",
                     "rendered": {
-                      "text": "rand(",
-                      "markdown": "`rand(`"
+                      "text": "MD5",
+                      "markdown": "`MD5`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -318,39 +660,87 @@
               }
             }
           ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10189,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10189,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "properties": {
-            "DevSkimSeverity": "Important",
+            "DevSkimSeverity": "Critical",
             "DevSkimConfidence": "High",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "Cryptography.BannedHashAlgorithm"
             ]
           }
         },
         {
-          "ruleId": "glog-f634bc8a-8d08-4db0-a559-87e1a6c9a7e3",
+          "ruleId": "1f2b0b91-3baf-391f-9c25-c9f7a83e7359",
           "kind": "fail",
           "level": "error",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Vulnerable Hash Algorithm"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 567,
-                  "startColumn": 26,
-                  "endLine": 567,
-                  "endColumn": 34,
-                  "charOffset": 25917,
-                  "charLength": 8,
+                  "startLine": 307,
+                  "startColumn": 30,
+                  "endLine": 307,
+                  "endColumn": 33,
+                  "charOffset": 10116,
+                  "charLength": 3,
                   "snippet": {
-                    "text": "rand() %",
+                    "text": "MD5",
                     "rendered": {
-                      "text": "rand() %",
-                      "markdown": "`rand() %`"
+                      "text": "MD5",
+                      "markdown": "`MD5`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -358,39 +748,87 @@
               }
             }
           ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10116,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10116,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "properties": {
-            "DevSkimSeverity": "Important",
+            "DevSkimSeverity": "Critical",
             "DevSkimConfidence": "High",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "Cryptography.BannedHashAlgorithm"
             ]
           }
         },
         {
-          "ruleId": "glog-c5229a75-a27a-45eb-8c61-2b75daf695bd",
+          "ruleId": "f97ed3a2-f0f9-3a37-86b4-770e1c9cc24c",
           "kind": "fail",
           "level": "error",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Vulnerable Hash Algorithm"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 566,
-                  "startColumn": 23,
-                  "endLine": 566,
-                  "endColumn": 28,
-                  "charOffset": 25829,
-                  "charLength": 5,
+                  "startLine": 305,
+                  "startColumn": 12,
+                  "endLine": 305,
+                  "endColumn": 15,
+                  "charOffset": 10065,
+                  "charLength": 3,
                   "snippet": {
-                    "text": "rand(",
+                    "text": "md5",
                     "rendered": {
-                      "text": "rand(",
-                      "markdown": "`rand(`"
+                      "text": "md5",
+                      "markdown": "`md5`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -398,39 +836,87 @@
               }
             }
           ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10065,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "sha512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 10065,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "sha256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "properties": {
-            "DevSkimSeverity": "Important",
+            "DevSkimSeverity": "Critical",
             "DevSkimConfidence": "High",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "Cryptography.BannedHashAlgorithm"
             ]
           }
         },
         {
-          "ruleId": "glog-842a1eb1-8320-4a58-89bb-bd04b68195de",
+          "ruleId": "1d4f286f-0904-3f31-9ce5-0a426e4e95e5",
           "kind": "fail",
-          "level": "error",
+          "level": "note",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Problematic C function detected (memcpy)"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 576,
-                  "startColumn": 23,
-                  "endLine": 576,
-                  "endColumn": 28,
-                  "charOffset": 26386,
-                  "charLength": 5,
+                  "startLine": 260,
+                  "startColumn": 4,
+                  "endLine": 260,
+                  "endColumn": 35,
+                  "charOffset": 9039,
+                  "charLength": 31,
                   "snippet": {
-                    "text": "rand(",
+                    "text": "memcpy(ctx->buffer, data, size)",
                     "rendered": {
-                      "text": "rand(",
-                      "markdown": "`rand(`"
+                      "text": "memcpy(ctx->buffer, data, size)",
+                      "markdown": "`memcpy(ctx->buffer, data, size)`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -438,39 +924,194 @@
               }
             }
           ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 9039,
+                        "charLength": 31
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(ctx->buffer, <size of ctx->buffer>,  data,  size)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "properties": {
-            "DevSkimSeverity": "Important",
+            "DevSkimSeverity": "BestPractice",
             "DevSkimConfidence": "High",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "API.DangerousAPI.ProblematicFunction"
             ]
           }
         },
         {
-          "ruleId": "glog-5ff7a422-b9ab-48f3-b45f-9228dc79d2b4",
+          "ruleId": "0ef7f0a1-8098-3cd1-982e-867203bfcf8f",
           "kind": "fail",
-          "level": "error",
+          "level": "note",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Problematic C function detected (memcpy)"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 497,
-                  "startColumn": 22,
-                  "endLine": 497,
+                  "startLine": 248,
+                  "startColumn": 8,
+                  "endLine": 248,
+                  "endColumn": 51,
+                  "charOffset": 8744,
+                  "charLength": 43,
+                  "snippet": {
+                    "text": "memcpy(&ctx->buffer[used], data, available)",
+                    "rendered": {
+                      "text": "memcpy(&ctx->buffer[used], data, available)",
+                      "markdown": "`memcpy(&ctx->buffer[used], data, available)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 8744,
+                        "charLength": 43
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(&ctx->buffer[used], <size of &ctx->buffer[used]>,  data,  available)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "e6fa2a62-31c9-3829-b7b6-f758545f9133",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Problematic C function detected (memcpy)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/modules/batch_pd/md5.cpp"
+                },
+                "region": {
+                  "startLine": 244,
+                  "startColumn": 12,
+                  "endLine": 244,
+                  "endColumn": 50,
+                  "charOffset": 8665,
+                  "charLength": 38,
+                  "snippet": {
+                    "text": "memcpy(&ctx->buffer[used], data, size)",
+                    "rendered": {
+                      "text": "memcpy(&ctx->buffer[used], data, size)",
+                      "markdown": "`memcpy(&ctx->buffer[used], data, size)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 8665,
+                        "charLength": 38
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(&ctx->buffer[used], <size of &ctx->buffer[used]>,  data,  size)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "02c315a0-a21c-3794-ac97-b49808d2fad6",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Vulnerable Hash Algorithm"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/modules/batch_pd/md5.cpp"
+                },
+                "region": {
+                  "startLine": 111,
+                  "startColumn": 24,
+                  "endLine": 111,
                   "endColumn": 27,
-                  "charOffset": 21881,
-                  "charLength": 5,
+                  "charOffset": 4141,
+                  "charLength": 3,
                   "snippet": {
-                    "text": "rand(",
+                    "text": "MD5",
                     "rendered": {
-                      "text": "rand(",
-                      "markdown": "`rand(`"
+                      "text": "MD5",
+                      "markdown": "`MD5`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -478,39 +1119,87 @@
               }
             }
           ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 4141,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 4141,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "properties": {
-            "DevSkimSeverity": "Important",
+            "DevSkimSeverity": "Critical",
             "DevSkimConfidence": "High",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "Cryptography.BannedHashAlgorithm"
             ]
           }
         },
         {
-          "ruleId": "glog-aae0fb09-b4bb-4fd9-8e84-d1fd83eb76e3",
+          "ruleId": "82cd63e4-d340-3a25-91cd-888b50742768",
           "kind": "fail",
           "level": "error",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Implementation of Vulnerable Cryptography Hash Function"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 566,
-                  "startColumn": 23,
-                  "endLine": 566,
-                  "endColumn": 31,
-                  "charOffset": 25829,
+                  "startLine": 151,
+                  "startColumn": 39,
+                  "endLine": 151,
+                  "endColumn": 47,
+                  "charOffset": 5620,
                   "charLength": 8,
                   "snippet": {
-                    "text": "rand() %",
+                    "text": "02441453",
                     "rendered": {
-                      "text": "rand() %",
-                      "markdown": "`rand() %`"
+                      "text": "02441453",
+                      "markdown": "`02441453`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -519,38 +1208,38 @@
             }
           ],
           "properties": {
-            "DevSkimSeverity": "Important",
-            "DevSkimConfidence": "High",
+            "DevSkimSeverity": "Critical",
+            "DevSkimConfidence": "Medium",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "Cryptography.HashAlgorithm.WeakOrBrokenImplementation"
             ]
           }
         },
         {
-          "ruleId": "glog-1c9a3a2e-2454-40d4-a896-884ebd385b1d",
+          "ruleId": "0ff09ed7-cee4-34ce-b886-0ee9f79ba46d",
           "kind": "fail",
           "level": "error",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Implementation of Vulnerable Cryptography Hash Function"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 497,
-                  "startColumn": 22,
-                  "endLine": 497,
-                  "endColumn": 30,
-                  "charOffset": 21881,
+                  "startLine": 130,
+                  "startColumn": 38,
+                  "endLine": 130,
+                  "endColumn": 46,
+                  "charOffset": 4607,
                   "charLength": 8,
                   "snippet": {
-                    "text": "rand() %",
+                    "text": "242070db",
                     "rendered": {
-                      "text": "rand() %",
-                      "markdown": "`rand() %`"
+                      "text": "242070db",
+                      "markdown": "`242070db`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -559,78 +1248,38 @@
             }
           ],
           "properties": {
-            "DevSkimSeverity": "Important",
-            "DevSkimConfidence": "High",
+            "DevSkimSeverity": "Critical",
+            "DevSkimConfidence": "Medium",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "Cryptography.HashAlgorithm.WeakOrBrokenImplementation"
             ]
           }
         },
         {
-          "ruleId": "glog-b37bde7e-e626-43c8-97ca-6ba6672338d4",
+          "ruleId": "3ff0d962-eebe-34b1-8ac9-e689b2a268bf",
           "kind": "fail",
           "level": "error",
           "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
+            "text": "Vulnerable Hash Algorithm"
           },
           "locations": [
             {
               "physicalLocation": {
                 "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
+                  "uri": "src/modules/batch_pd/md5.cpp"
                 },
                 "region": {
-                  "startLine": 492,
-                  "startColumn": 22,
-                  "endLine": 492,
-                  "endColumn": 30,
-                  "charOffset": 21692,
-                  "charLength": 8,
-                  "snippet": {
-                    "text": "rand() %",
-                    "rendered": {
-                      "text": "rand() %",
-                      "markdown": "`rand() %`"
-                    }
-                  },
-                  "sourceLanguage": "cpp"
-                }
-              }
-            }
-          ],
-          "properties": {
-            "DevSkimSeverity": "Important",
-            "DevSkimConfidence": "High",
-            "tags": [
-              "Cryptography.PRNG.Weak"
-            ]
-          }
-        },
-        {
-          "ruleId": "glog-9632352b-ef70-4786-9eea-aac25c6dca25",
-          "kind": "fail",
-          "level": "error",
-          "message": {
-            "text": "\"Avoid Using Weak or Non-Cryptographic Random Number Generators\""
-          },
-          "locations": [
-            {
-              "physicalLocation": {
-                "artifactLocation": {
-                  "uri": "src/modules/batch_pd/hip/hip_image_augmentations.cpp"
-                },
-                "region": {
-                  "startLine": 491,
+                  "startLine": 56,
                   "startColumn": 19,
-                  "endLine": 491,
-                  "endColumn": 27,
-                  "charOffset": 21645,
-                  "charLength": 8,
+                  "endLine": 56,
+                  "endColumn": 22,
+                  "charOffset": 1965,
+                  "charLength": 3,
                   "snippet": {
-                    "text": "rand() %",
+                    "text": "MD5",
                     "rendered": {
-                      "text": "rand() %",
-                      "markdown": "`rand() %`"
+                      "text": "MD5",
+                      "markdown": "`MD5`"
                     }
                   },
                   "sourceLanguage": "cpp"
@@ -638,11 +1287,805 @@
               }
             }
           ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 1965,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 1965,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Critical",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "Cryptography.BannedHashAlgorithm"
+            ]
+          }
+        },
+        {
+          "ruleId": "1d7f9f4a-9d11-3357-b721-51b68d58ca3e",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Vulnerable Hash Algorithm"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/modules/batch_pd/md5.cpp"
+                },
+                "region": {
+                  "startLine": 51,
+                  "startColumn": 7,
+                  "endLine": 51,
+                  "endColumn": 10,
+                  "charOffset": 1860,
+                  "charLength": 3,
+                  "snippet": {
+                    "text": "MD5",
+                    "rendered": {
+                      "text": "MD5",
+                      "markdown": "`MD5`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 1860,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 1860,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Critical",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "Cryptography.BannedHashAlgorithm"
+            ]
+          }
+        },
+        {
+          "ruleId": "11c692eb-3399-358d-adf9-457c6d094e28",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Vulnerable Hash Algorithm"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/modules/batch_pd/md5.cpp"
+                },
+                "region": {
+                  "startLine": 49,
+                  "startColumn": 8,
+                  "endLine": 49,
+                  "endColumn": 11,
+                  "charOffset": 1831,
+                  "charLength": 3,
+                  "snippet": {
+                    "text": "MD5",
+                    "rendered": {
+                      "text": "MD5",
+                      "markdown": "`MD5`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 1831,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 1831,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "SHA512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Critical",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "Cryptography.BannedHashAlgorithm"
+            ]
+          }
+        },
+        {
+          "ruleId": "5e520ce1-a7d2-356c-8740-7cab5c016de9",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "Vulnerable Hash Algorithm"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/modules/batch_pd/md5.cpp"
+                },
+                "region": {
+                  "startLine": 47,
+                  "startColumn": 10,
+                  "endLine": 47,
+                  "endColumn": 13,
+                  "charOffset": 1813,
+                  "charLength": 3,
+                  "snippet": {
+                    "text": "md5",
+                    "rendered": {
+                      "text": "md5",
+                      "markdown": "`md5`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 1813,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "sha512"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "A weak or broken hash algorithm was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/md5.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 1813,
+                        "charLength": 3
+                      },
+                      "insertedContent": {
+                        "text": "sha256"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Critical",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "Cryptography.BannedHashAlgorithm"
+            ]
+          }
+        },
+        {
+          "ruleId": "66024b3f-7bc5-33fb-8e8d-0441b19ba2c0",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Detected Vulnerability in C Function (strlen)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/modules/batch_pd/kernel_cache.cpp"
+                },
+                "region": {
+                  "startLine": 86,
+                  "startColumn": 35,
+                  "endLine": 86,
+                  "endColumn": 50,
+                  "charOffset": 3424,
+                  "charLength": 15,
+                  "snippet": {
+                    "text": "strlen(keys[i])",
+                    "rendered": {
+                      "text": "strlen(keys[i])",
+                      "markdown": "`strlen(keys[i])`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "If a string is missing a null terminator, strlen will read past the end of the buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/kernel_cache.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 3424,
+                        "charLength": 15
+                      },
+                      "insertedContent": {
+                        "text": "strlen_s(keys[i], <size of keys[i]>)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "If a string is missing a null terminator, strlen will read past the end of the buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/kernel_cache.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 3424,
+                        "charLength": 15
+                      },
+                      "insertedContent": {
+                        "text": "strnlen(keys[i], <size of keys[i]>)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "8ab23c78-85e1-314b-a958-7a6c4c5728e5",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Detected Use of Prohibited C Function (strcat)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                },
+                "region": {
+                  "startLine": 3163,
+                  "startColumn": 8,
+                  "endLine": 3163,
+                  "endColumn": 35,
+                  "charOffset": 101189,
+                  "charLength": 27,
+                  "snippet": {
+                    "text": "strcat(temp, imageNames[j])",
+                    "rendered": {
+                      "text": "strcat(temp, imageNames[j])",
+                      "markdown": "`strcat(temp, imageNames[j])`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "If the combination of strings is larger than the destination buffer, strcat will cbuffer overflow the destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 101189,
+                        "charLength": 27
+                      },
+                      "insertedContent": {
+                        "text": "strcat_s(temp, <size of temp>,  imageNames[j])"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "If the combination of strings is larger than the destination buffer, strcat will cbuffer overflow the destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 101189,
+                        "charLength": 27
+                      },
+                      "insertedContent": {
+                        "text": "strlcat(temp,  imageNames[j], <size of temp>)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
           "properties": {
             "DevSkimSeverity": "Important",
             "DevSkimConfidence": "High",
             "tags": [
-              "Cryptography.PRNG.Weak"
+              "API.DangerousAPI.BannedFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "90e986ec-a1e9-38a7-a9e7-bf1220b32e41",
+          "kind": "fail",
+          "level": "warning",
+          "message": {
+            "text": "Unsecured Web Link Vulnerability"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "src/modules/batch_pd/kernel_cache.cpp"
+                },
+                "region": {
+                  "startLine": 32,
+                  "startColumn": 3,
+                  "endLine": 32,
+                  "endColumn": 24,
+                  "charOffset": 1393,
+                  "charLength": 21,
+                  "snippet": {
+                    "text": "http://www.apache.org",
+                    "rendered": {
+                      "text": "http://www.apache.org",
+                      "markdown": "`http://www.apache.org`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "An HTTP-based URL without TLS was detected."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "src/modules/batch_pd/kernel_cache.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 1393,
+                        "charLength": 21
+                      },
+                      "insertedContent": {
+                        "text": "https://www.apache.org"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Moderate",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "ThreatModel.Integration.HTTP"
+            ]
+          }
+        },
+        {
+          "ruleId": "3ab1a4b3-1ec6-33e0-94c8-aa84f78ba5f5",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Detected Use of Prohibited C Function (strcpy)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                },
+                "region": {
+                  "startLine": 3162,
+                  "startColumn": 8,
+                  "endLine": 3162,
+                  "endColumn": 25,
+                  "charOffset": 101162,
+                  "charLength": 17,
+                  "snippet": {
+                    "text": "strcpy(temp, dst)",
+                    "rendered": {
+                      "text": "strcpy(temp, dst)",
+                      "markdown": "`strcpy(temp, dst)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "strcpy is frequently dangerous, as it will cause a buffer overflow if the source is larger than the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 101162,
+                        "charLength": 17
+                      },
+                      "insertedContent": {
+                        "text": "strcpy_s(temp, <size of temp>,  dst)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "strcpy is frequently dangerous, as it will cause a buffer overflow if the source is larger than the destination."
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 101162,
+                        "charLength": 17
+                      },
+                      "insertedContent": {
+                        "text": "strlcpy(temp,  dst, <size of temp>)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Important",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.BannedFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "75c3f5d4-8565-38f3-a1db-e4574b246075",
+          "kind": "fail",
+          "level": "note",
+          "message": {
+            "text": "Problematic C function detected (memcpy)"
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                },
+                "region": {
+                  "startLine": 3155,
+                  "startColumn": 12,
+                  "endLine": 3155,
+                  "endColumn": 80,
+                  "charOffset": 100905,
+                  "charLength": 68,
+                  "snippet": {
+                    "text": "memcpy(temp_output_row, (output_row), elementsInRow * sizeof (Rpp8u)",
+                    "rendered": {
+                      "text": "memcpy(temp_output_row, (output_row), elementsInRow * sizeof (Rpp8u)",
+                      "markdown": "`memcpy(temp_output_row, (output_row), elementsInRow * sizeof (Rpp8u)`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "There are a number of conditions in which memcpy can introduce a vulnerability (mismatched buffer sizes, null pointers, etc.). More secure alternitives perform additional validation of the source and destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 100905,
+                        "charLength": 68
+                      },
+                      "insertedContent": {
+                        "text": "memcpy_s(temp_output_row, <size of temp_output_row>,  (output_row),  elementsInRow * sizeof (Rpp8u)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "BestPractice",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.ProblematicFunction"
+            ]
+          }
+        },
+        {
+          "ruleId": "07c032d8-5c27-34bf-83aa-a8562ad2564e",
+          "kind": "fail",
+          "level": "error",
+          "message": {
+            "text": "\"Detected Use of Prohibited C Function (strcat)\""
+          },
+          "locations": [
+            {
+              "physicalLocation": {
+                "artifactLocation": {
+                  "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                },
+                "region": {
+                  "startLine": 3137,
+                  "startColumn": 4,
+                  "endLine": 3137,
+                  "endColumn": 20,
+                  "charOffset": 100352,
+                  "charLength": 16,
+                  "snippet": {
+                    "text": "strcat(dst, \"/\")",
+                    "rendered": {
+                      "text": "strcat(dst, \"/\")",
+                      "markdown": "`strcat(dst, \"/\")`"
+                    }
+                  },
+                  "sourceLanguage": "cpp"
+                }
+              }
+            }
+          ],
+          "fixes": [
+            {
+              "description": {
+                "text": "If the combination of strings is larger than the destination buffer, strcat will cbuffer overflow the destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 100352,
+                        "charLength": 16
+                      },
+                      "insertedContent": {
+                        "text": "strcat_s(dst, <size of dst>,  \"/\")"
+                      }
+                    }
+                  ]
+                }
+              ]
+            },
+            {
+              "description": {
+                "text": "If the combination of strings is larger than the destination buffer, strcat will cbuffer overflow the destination buffer"
+              },
+              "artifactChanges": [
+                {
+                  "artifactLocation": {
+                    "uri": "utilities/rpp-unittests/HIP_NEW/BatchPD_hip_pln1.cpp"
+                  },
+                  "replacements": [
+                    {
+                      "deletedRegion": {
+                        "charOffset": 100352,
+                        "charLength": 16
+                      },
+                      "insertedContent": {
+                        "text": "strlcat(dst,  \"/\", <size of dst>)"
+                      }
+                    }
+                  ]
+                }
+              ]
+            }
+          ],
+          "properties": {
+            "DevSkimSeverity": "Important",
+            "DevSkimConfidence": "High",
+            "tags": [
+              "API.DangerousAPI.BannedFunction"
             ]
           }
         }
